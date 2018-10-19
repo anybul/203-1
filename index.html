@@ -1,0 +1,1194 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=960">
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="production.min.js"></script>
+
+<style type="text/css">
+@keyframes zadanie-vypolneno{
+	0%{opacity:0;}
+	2%{
+		opacity:0;
+		left:36px;
+		width:38px;
+		font-size:0px;
+		background-color:#4EE2D6;
+		box-shadow: 0px 0px 6px 4px rgba(36,221,208,1);
+	}
+	2.1%{opacity:1}
+	26.5%{
+		left:36px;
+		width:206px;
+		font-size:0px;
+		box-shadow: 0px 0px 0px 0 rgba(36,221,208,1);
+	}
+	26.51%{
+		font-size:17px;
+	}
+	50%{
+		background-color:#24ddd0;/*#9BEDE4;*/
+
+	}
+}
+#passport-stamp{
+	opacity:0;
+	z-index:-1;
+	position:absolute;
+	background:url(img/stamp_x2.png) center center no-repeat;
+	background-size:100%;
+	width: 131px;
+    height: 41px;
+    left: 490px;
+    text-align: center;
+    top: 151px;
+    padding-top: 40px;
+    line-height: 20px;
+	color:#2BB3A9;
+    transform: scale(15,15);
+	font-weight: 200;
+}
+#passport-stamp .stamp-figures, #passport-stamp .stamp-dot{
+	display:inline-block;
+	height:20px;
+	width:18px;
+	background-size:100%;
+}
+#passport-stamp .stamp-dot{
+	width:9px;
+	background-image:url(img/dot.png);
+}
+.finished #passport-stamp{
+    transform: rotate(-2deg);
+	opacity:1;
+	z-index:99;
+	transition-duration:0.5s;
+}
+.finished #checkButton{display:none;}
+
+.passport-field{
+    background-size:100%;
+	box-sizing:border-box;
+	position:absolute;
+	width:132px;
+	height:132px;
+	top:308px;
+    -webkit-box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+	/*filter: saturate(50%);
+	-webkit-filter: saturate(50%);*/
+}
+.passport-inner-overlay{
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+.passport-special{
+	background-size:100%;
+	box-sizing:border-box;
+    /*border: #DFDACF 2px solid;*/
+	position:absolute;
+	width:132px;
+	height: 50px;
+	left: 794px;
+    -webkit-box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+	/*filter: saturate(50%);
+	-webkit-filter: saturate(50%);*/
+	cursor:pointer;
+}
+.passport-special.passport-selected,
+.passport-special.passport-selected:hover{
+	/*border-color:#00A094;
+	cursor:default;*/
+	background-color: rgba(255,255,255,.6);
+    -webkit-box-shadow: 0 0 0 2px #00a095;
+    -moz-box-shadow: 0 0 0 2px #00a095;
+    box-shadow: 0 0 0 2px #00a095;
+
+}
+
+.passport-special.passport-selected:before,
+.passport-special.passport-selected:hover:before{
+	color:#00A094;
+}
+.passport-special.passport-selected.passport-right:before{
+	color:#2D2D2D;
+}
+.passport-field, .passport-special{
+    background-color:rgba(255,255,255, .3);
+}
+.passport-field:hover, .passport-special:hover{
+    background-color:rgba(240,240,240, .3);
+}
+.passport-field:before{
+	position:absolute;
+	display:block;
+	white-space: pre;
+	text-align:center;
+	color:#666666;
+	width:130px;
+	top:49px;
+	left:0px;
+	line-height: 18px;
+	background:url(img/plus_small.svg) top center no-repeat;
+	background-size:11px;
+	padding-top: 12px;
+	filter: saturate(50%);
+	-webkit-filter: saturate(50%);
+	z-index:1;
+}
+.passport-field:hover:before{
+	color:#2d2d2d;
+	background-image:url(img/plus_small_hover.svg);
+}
+.passport-special:before{
+	position:absolute;
+	display:block;
+	white-space: pre;
+	text-align:left;
+	color:#666666;
+	width:130px;
+	top:6px;
+	left:10px;
+	line-height: 18px;
+}
+.passport-special:hover:before{
+	color:#2d2d2d;
+}
+.passport-special.passport-wrong:before{
+	color:#2d2d2d;
+	z-index: 1;
+}
+#passport-group:hover:before{
+	color:#2D2D2D;
+	background-image:url(img/plus_big_hover.svg);
+}
+.passport-field:hover:before{
+	/*color:#ffffff;
+	background:url(img/plus_small_hover.svg) top center no-repeat;
+	background-size:11px;*/
+	filter: saturate(100%);
+	-webkit-filter: saturate(100%);
+}
+@keyframes passport-wrong-anim{
+	20%{border-color:#f48154;}
+}
+.passport-field.passport-wrong, .passport-special.passport-wrong, .passport-special.passport-wrong:hover {
+	-webkit-box-shadow: 0 0 0 2px #f48154;
+    -moz-box-shadow: 0 0 0 2px #f48154;
+    box-shadow: 0 0 0 2px #f48154;
+	cursor:pointer;
+	/*animation: passport-wrong-anim 1.5s linear;*/
+}
+.passport-field.passport-wrong:before, 
+.passport-special.passport-wrong:before,
+.passport-field.passport-wrong:hover:before, 
+.passport-special.passport-wrong:hover:before
+{
+	color:#2d2d2d;
+}
+.passport-field.passport-wrong:before,.passport-field.passport-wrong:hover:before{
+    background-image: url(img/plus_small_hover.svg) 
+}
+.passport-field:hover{
+	/*border:#FFE66C 3px solid;
+	background-color:#FFE66C;
+	margin-top:-1px;
+	margin-left:-1px;*/
+	cursor:pointer;
+	filter: saturate(100%);
+	-webkit-filter: saturate(100%);
+
+}
+.passport-special:hover{
+	/*filter: saturate(100%);
+	-webkit-filter: saturate(100%);*/
+}
+.passport-special.passport-right:hover{
+	filter: saturate(50%);
+	-webkit-filter: saturate(50%);
+}
+.passport-field[data-variant]:not(.passport-right):hover{
+	/*margin-top:0px;
+	margin-left:0px;
+	border:none;*/
+	-webkit-box-shadow: 0 0 0 2px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0 0 0 2px rgba(0,0,0,0.2);
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.2);
+}
+.passport-field[data-variant]:not(.passport-right):hover .passport-field-line{
+	border-bottom:#FFE66C 2px solid;
+}
+
+@-webkit-keyframes passport-right-anim {
+	0%{
+		padding:0px;
+		border: #23DDD1 0px solid;
+		-webkit-box-shadow:#23DDD1 0px 0px 0px 2px;
+		box-shadow:none;
+		box-shadow: #23DDD1 0px 0px 0px 2px;
+	}
+	100%{
+		padding:1px;
+		border:none;
+		-webkit-box-shadow: rgb(164, 248, 242) 0px 0px 8px 0px;
+		box-shadow: rgb(164, 248, 242) 0px 0px 8px 0px;
+	}
+}
+@keyframes passport-right-anim {
+	0%{
+		padding:0px;
+		border: #23DDD1 0px solid;
+		-webkit-box-shadow:none;
+		box-shadow: #23DDD1 0px 0px 0px 2px;
+	}
+	100%{
+		padding:2px;
+		border-width:0px;
+		-webkit-box-shadow: rgb(164, 248, 242) 0px 0px 8px 0px;
+		box-shadow: rgb(164, 248, 242) 0px 0px 8px 0px;
+	}
+}
+@-webkit-keyframes passport-right-anim-inner{
+	0%{
+		opacity:0.5;
+	}
+	
+	100%{
+		opacity:0;
+	}
+}
+@keyframes passport-right-anim-inner{
+	0%{
+		opacity:0.5;
+	}
+	
+	100%{
+		opacity:0;
+	}
+}
+.passport-special.passport-selected.passport-right,
+.passport-special.passport-selected.passport-right:hover
+ {
+    background-color: rgba(255,255,255,.6);
+	
+}
+.passport-special.passport-selected.passport-right,
+.passport-special.passport-selected.passport-right:hover,
+.passport-field[data-variant].passport-right, .passport-field[data-variant].passport-right:hover{
+	/*margin-top:0px;
+	margin-left:0px;
+	border-color:#23DDD1;*/
+	border:none;
+	padding:2px;
+	-webkit-box-shadow: rgb(164, 248, 242) 0px 0px 8px 0px;
+	box-shadow: rgb(164, 248, 242) 0px 0px 8px 0px;
+	cursor:default;
+	/*filter: saturate(50%);
+	-webkit-filter: saturate(50%);*/
+	-webkit-animation: passport-right-anim 0.7s linear 1;
+	animation: passport-right-anim 1.7s linear 1;
+	background-color:rgba(255,255,255,.3);
+}
+.passport-special.passport-selected.passport-right .passport-inner-overlay, .passport-field.passport-right .passport-inner-overlay{
+	display:block;
+	position:absolute;
+	width:100%;
+	height:100%;
+	background-color:#4df0e5;
+	opacity:0;
+	top:0px;
+	left:0px;
+	-webkit-animation: passport-right-anim-inner 1.7s linear 1;
+	animation: passport-right-anim-inner 1.7s linear 1;
+}
+.passport-field[data-variant].passport-right .passport-field-line, .passport-field[data-variant].passport-right:hover .passport-field-line{
+	border-bottom:none;
+}
+.passport-field[data-variant]{
+	/*border:none;
+	padding:1px;*/
+	background-color:rgba(255,255,255,0.3);
+	/*-webkit-box-shadow: 0 0 0 2px #00a095;
+    -moz-box-shadow: 0 0 0 2px #00a095;
+    box-shadow: 0 0 0 2px #00a095;*/
+}
+.passport-field[data-variant]:hover .passport-inner-overlay{
+	width:100%;
+	height:100%;
+	background-color:rgba(0,0,0,.1);
+}
+
+
+.passport-field[data-variant] .passport-field-line{
+    border-bottom: #00A095 2px solid;
+}
+.passport-field[data-variant].passport-wrong,.passport-field[data-variant].passport-wrong:hover{
+	-webkit-box-shadow: 0 0 0 2px #f48154;
+    -moz-box-shadow: 0 0 0 2px #f48154;
+    box-shadow: 0 0 0 2px #f48154;
+	/*border-color:#f48154;*/
+	/*animation: passport-wrong-anim 1.5s linear;*/
+}
+.passport-field[data-variant].passport-right{
+	filter:none;
+	-webkit-filter:none;
+}
+@keyframes passport-wrong-inner-anim{
+	20%{
+		background-color: #F48356;
+		opacity: 0.7;
+	}
+}
+.passport-field.passport-wrong .passport-inner-overlay, .passport-special.passport-wrong .passport-inner-overlay{
+	position:absolute;
+	width:100%;
+	height:100%;
+	background-color: rgba(255, 162, 128, .5);
+	/*animation: passport-wrong-inner-anim 1.5s linear;*/
+}
+.passport-field.passport-wrong:hover .passport-inner-overlay, .passport-special.passport-wrong:hover .passport-inner-overlay{
+    background-color:rgba(217, 136, 104, 0.5);
+}
+
+.passport-field.passport-wrong .passport-field-line{
+	border-bottom:#F48356 2px solid;
+}
+.passport-field.passport-wrong:hover .passport-field-line{
+	border-bottom: rgba(255,230,108,0) 2px solid;
+}
+.passport-field[data-variant]:before{
+	display:none;
+
+}
+#passport-mixtureorsubstance{
+    left: 794px;
+}
+#passport-mixtureorsubstance:before{
+	top:32px;
+	content:"cмесь\Aили чистое\Aвещество"
+}
+#passport-buoyancy{
+	left: 642px;
+}
+#passport-buoyancy:before{
+	content:"плавучесть"
+}
+#passport-combustibility{
+	left: 490px;
+}
+#passport-combustibility:before{
+	content:"горючесть"
+}
+#passport-state{
+	left: 338px;
+}
+#passport-state:before{
+	top:42px;
+	content:"агрегатное\A состояние"
+}
+#passport-group{
+    top: 167px;
+    left: 642px;
+    height: 100px;
+}
+#passport-brittleness {
+    left: 186px;
+}
+#passport-photo{
+    top: 130px;
+    left: 34px;
+    width: 255px;
+    height: 310px;
+}
+#passport-photo:before {
+    top: 133px;
+    left: 63px;
+    content: "фото";
+}
+#passport-place{
+    top: 167px;
+    left: 642px;
+    height: 98px;
+}
+#passport-place:before, #passport-mark:before{
+	content: "";
+    top: 33px;
+    left: 51px;
+    width: 29px;
+    height: 29px;
+    background-image: url(img/plus_big.svg);
+    background-size: 100%;
+}
+#passport-place:hover:before, #passport-mark:hover:before{
+	background-image: url(img/plus_big_hover.svg);
+	background-size: 100%;
+}
+#passport-mark{
+    top: 167px;
+    left: 794px;
+    height: 98px;
+}
+#passport-selector{
+	background-color:#998e74;
+	position:absolute;
+	padding: 10px;
+	padding-right:0px;
+	z-index:5;
+    -webkit-box-shadow: 1px 1px 6px 0 rgba(90,90,90,0.2);
+    -moz-box-shadow: 1px 1px 6px 0 rgba(90,90,90,0.2);
+    box-shadow: 1px 1px 6px 0 rgba(90,90,90,0.2);
+}
+#passport-selector:before{
+	content:'';
+	width:20px;
+	height:13.5px;
+	position:absolute;
+	top:-13px;
+	left:64px;
+	z-index: -1;
+	background-image:url(img/arrow.png);
+	background-size:100%;
+}
+#passport-selector[data-field='state']:before{left:213px;}
+#passport-selector[data-field='brittleness']:before{
+	left:213px;
+}
+#passport-selector[data-field='mark']:before{left:497px;}
+#passport-selector[data-field='buoyancy']:before{left:140px;}
+#passport-selector[data-field='mixtureorsubstance']:before{left:212px;}
+#passport-selector[data-field='combustibility']:before {left:140px;}
+#passport-selector[data-field='place']:before {left:140px;}
+#passport-selector[data-field='group']:before {left:140px;}
+#passport-selector .passport-overlay{
+	position:fixed;
+	display:block;
+	top:0px;
+	left:0px;
+	width:100vw;
+	height:100vh;
+	background-color:rgba(255,255,255,.5);
+	z-index:-1;
+}
+#passport-rust{
+    top: 167px;
+}
+#passport-no-rust{
+    top: 226px;
+}
+#passport-no-rust:before{
+	top:14px;
+}
+#passport-lightweight{
+    top: 285px;
+}
+#passport-magnets{
+    top: 344px;
+}
+#passport-fuse{
+    top: 404px;
+}
+.selector-variant{
+	display:none;
+	/*border:red 1px solid;*/
+	float:right;
+	cursor:pointer;
+	margin-right:10px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	border:#DFDACF 2px solid;
+	background-size:100% auto;
+	background-color: rgba(255,255,255,1);
+	filter: saturate(50%);
+	-webkit-filter: saturate(50%);
+}
+.selector-variant:hover{
+	border-color:#B7B7B7;
+	filter: saturate(100%);
+	-webkit-filter: saturate(100%);
+	background-color: rgba(240,240,240,1);
+}
+#passport-selector[data-field='place']{
+    top: 258px;
+    left: 558px;
+}
+#passport-selector[data-field='mark']{
+    top: 258px;
+    left: 355px;
+}
+#passport-selector[data-field='mixtureorsubstance']{
+    top: 416px;
+    left: 637px;
+}
+#passport-selector[data-field='buoyancy']{
+    top: 416px;
+    left: 557px;
+}
+#passport-selector[data-field='combustibility']{
+	top: 417px;
+    left: 405px;
+}
+#passport-selector[data-field='state']{
+	top: 417px;
+    left: 181px;
+}
+#passport-selector[data-field='photo']{
+	top: 310px;
+    left: 88px;
+}
+#passport-selector[data-field='brittleness']{
+	top: 417px;
+    left: 101px;
+}
+#passport-selector[data-field='group']{
+	top: 245px;
+    left: 559px;
+}
+#passport-selector[data-field='place'] .selector-variant{
+	width:132px;
+	height:98px;
+}
+#passport-place[data-variant='0'], #passport-selector[data-field='place'] .selector-variant-0{background-image:url(img/org.png);display:block;}
+#passport-place[data-variant='1'], #passport-selector[data-field='place'] .selector-variant-1{background-image:url(img/neorg.png);display:block;}
+
+#passport-selector[data-field='mark'] .selector-variant{
+	width:132px;
+	height:100px;
+}
+#passport-mark[data-variant='0'], #passport-selector[data-field='mark'] .selector-variant-0{background-image:url(img/symbol1.png);display:block;}
+#passport-mark[data-variant='1'], #passport-selector[data-field='mark'] .selector-variant-1{background-image:url(img/symbol2.png);display:block;}
+#passport-mark[data-variant='2'], #passport-selector[data-field='mark'] .selector-variant-2{background-image:url(img/symbol3.png);display:block;}
+#passport-mark[data-variant='3'], #passport-selector[data-field='mark'] .selector-variant-3{background-image:url(img/symbol4.png);display:block;}
+
+#passport-selector[data-field='mixtureorsubstance'] .selector-variant{
+	width: 132px;
+    height: 131px;
+	background-position:center center;
+	background-repeat:no-repeat;
+}
+#passport-mixtureorsubstance{background-size:76px;background-position:center center;background-repeat:no-repeat;}
+#passport-mixtureorsubstance[data-variant='0'], #passport-selector[data-field='mixtureorsubstance'] .selector-variant-0{background-image:url(img/mixture.png);display:block;background-size:84px;}
+#passport-mixtureorsubstance[data-variant='1'], #passport-selector[data-field='mixtureorsubstance'] .selector-variant-1{background-image:url(img/substance.png);display:block;background-size:76px;}
+
+#passport-selector[data-field='buoyancy'] .selector-variant{
+	width: 132px;
+    height: 131px;
+	background-position:center center;
+	background-repeat:no-repeat;
+}
+#passport-buoyancy{background-size:70px;background-position:center center;background-repeat:no-repeat;}
+#passport-buoyancy[data-variant='0'], #passport-selector[data-field='buoyancy'] .selector-variant-0{background-image:url(img/plav.png);display:block;background-size:70px;}
+#passport-buoyancy[data-variant='1'], #passport-selector[data-field='buoyancy'] .selector-variant-1{background-image:url(img/neplav.png);display:block;background-size:89px;}
+
+#passport-selector[data-field='combustibility'] .selector-variant{
+	width: 132px;
+    height: 131px;
+	background-position:center center;
+	background-repeat:no-repeat;
+}
+#passport-combustibility{background-size:65px;background-position:center center;background-repeat:no-repeat;}
+#passport-combustibility[data-variant='0'], #passport-selector[data-field='combustibility'] .selector-variant-0{background-image:url(img/gor.png);display:block;background-size:65px;}
+#passport-combustibility[data-variant='1'], #passport-selector[data-field='combustibility'] .selector-variant-1{background-image:url(img/negor.png);display:block;background-size:83px;}
+
+#passport-selector[data-field='state'] .selector-variant{
+    width: 132px;
+    height: 131px;
+	background-position:center center;
+	background-repeat:no-repeat;
+}
+#passport-state{background-size:61px;background-position:center center;background-repeat:no-repeat;}
+#passport-state[data-variant='0'], #passport-selector[data-field='state'] .selector-variant-0{background-image:url(img/gaz.png);display:block;background-size:61px;}
+#passport-state[data-variant='1'], #passport-selector[data-field='state'] .selector-variant-1{background-image:url(img/zhid.png);display:block;background-size:76px;}
+#passport-state[data-variant='2'], #passport-selector[data-field='state'] .selector-variant-2{background-image:url(img/tver.png);display:block;background-size:84px;}
+
+#passport-selector[data-field='brittleness'] .selector-variant{
+    width: 132px;
+    height: 131px;
+	background-position:center center;
+	background-repeat:no-repeat;
+}
+#passport-brittleness{background-size:64px;background-position:center center;background-repeat:no-repeat;}
+#passport-brittleness[data-variant='0'], #passport-selector[data-field='brittleness'] .selector-variant-0{background-image:url(img/hrup.png);display:block;background-size:61px;}
+#passport-brittleness[data-variant='1'], #passport-selector[data-field='brittleness'] .selector-variant-1{background-image:url(img/plast.png);display:block;background-size:90px;}
+
+#passport-selector[data-field='group'] .selector-variant{
+    width: 132px;
+    height: 100px;
+	background-position:center center;
+	background-repeat:no-repeat;
+}
+#passport-group{background-size:132px;background-position:center center;background-repeat:no-repeat;}
+#passport-group[data-variant='0'], #passport-selector[data-field='group'] .selector-variant-0{background-image:url(img/metal.png);display:block;background-size:132px;}
+#passport-group[data-variant='1'], #passport-selector[data-field='group'] .selector-variant-1{background-image:url(img/stone.png);display:block;background-size:132px;}
+
+#passport-selector[data-field='photo'] .selector-variant{
+	width: 127px;
+    height: 155px;
+	background-position:center center;
+	background-repeat:no-repeat;
+}
+#passport-selector[data-variant='0'] .selector-variant-0{
+	border-color: #00A094;
+}
+#passport-selector[data-variant='1'] .selector-variant-1{
+	border-color: #00A094;
+}
+#passport-selector[data-variant='2'] .selector-variant-2{
+	border-color: #00A094;
+}
+#passport-selector[data-variant='3'] .selector-variant-3{
+	border-color: #00A094;
+}
+#passport-photo{background-position:center center;background-repeat:no-repeat;}
+#passport-photo[data-variant='0'], #passport-selector[data-field='photo'] .selector-variant-0{background-image:url(img/photo1.png);display:block;background-size:cover;}
+#passport-photo[data-variant='1'], #passport-selector[data-field='photo'] .selector-variant-1{background-image:url(img/photo2.png);display:block;background-size:cover;}
+#passport-photo[data-variant='2'], #passport-selector[data-field='photo'] .selector-variant-2{background-image:url(img/photo3.png);display:block;background-size:cover;}
+/*#passport-photo[data-variant='3'], #passport-selector[data-field='photo'] .selector-variant-3{background-image:url(img/sr.jpg);display:block;background-size:cover;}*/
+
+.passportname-container{
+    position:absolute;
+	top: 143px;
+    left: 338px;
+    width: 283px;
+}
+.passportname-container:before{
+	content:'название:';
+	display:block;
+	position:absolute;
+	color:#9f9290;
+	top:-20px;
+}
+.passportname-container #passport-name{
+	border:none;
+	background-color:transparent;
+	/*color:#666666;*/
+	outline:none;
+	font-size: 27px;
+    padding-left: 0px;
+    padding-top: 3px;
+}
+#passport-place:after{
+	content:'место\0a веществования:';
+	display:block;
+	position:absolute;
+	color:#9f9290;
+	top:-43px;
+	line-height:1em;
+}
+#passport-mark:after {
+    content: 'обозначение\0a на\a0карте:';
+    display: block;
+    position: absolute;
+    color: #9f9290;
+    top: -43px;
+    line-height: 1em;
+}
+#passport-brittleness {
+    background-size: 64px;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#passport-brittleness:before {
+    top: 32px;
+    content: "хрупкое\Aили\Aпластичное";
+}
+#passport-group:before {
+    content: "";
+    top: 33px;
+    left: 51px;
+    width: 29px;
+    height: 29px;
+    background-image: url(img/plus_big.svg);
+    background-size: 100%;
+}
+#passport-group.passport-wrong:before, #passport-group.passport-wrong:hover:before{
+	background-image: url(img/plus_big_hover.svg);
+}
+#passport-group:after{
+	content:'группа\Aматериалов:';
+	display:block;
+	position:absolute;
+	color:#9f9290;
+	top:-43px;
+	line-height:1em;
+}
+#passport-state:after{
+	content:'свойства:';
+	display:block;
+	position:absolute;
+	color:#9f9290;
+	top:-25px;
+	left: -3px;
+	line-height:1em;
+}
+.passport-line{
+    position: absolute;
+    top: 24px;
+    border-top: #D7D3CE 1px solid;
+    width: 100%;
+}
+#passport-rust:before{
+    content:'ржавеет\Aот воды';
+}
+#passport-rust:after{
+    content: 'особые\Aприметы:';
+    display: block;
+    position: absolute;
+    color: #9f9290;
+    top: -45px;
+    line-height: 1em;
+}
+#passport-no-rust:before{
+    content:'не ржавеет';
+}
+#passport-lightweight:before{
+    content:'самый легкий\Aметалл';
+}
+#passport-magnets:before{
+    content:'притягивается\Aк магниту';
+}
+#passport-fuse:before{
+    content:'очень легко\Aплавится';
+}
+.passportcolor-container{
+    position:absolute;
+	top: 209px;
+    left: 338px;
+    width: 283px;
+	z-index:2;
+}
+.passportcolor-container:before{
+	content:'цвет:';
+	display:block;
+	position:absolute;
+	color:#9f9290;
+	top:-20px;
+}
+.passportcolor-container.passport-right:after{
+	display:none;
+}
+.passportcolor-container #passport-color{
+	border:none;
+	background-color:transparent;
+	color:#2d2d2d;
+	outline:none;
+	font-size:24px;
+	padding-left: 1px;
+	width:284px;
+}
+#passport-color .color-opt{
+	/*border:red 1px solid;*/
+	width:270px;
+	height:25px;
+	cursor:pointer;
+	display:none;
+	background-color:#ffffff;
+	color:#666666;/**/
+	z-index:1;
+	position:relative;
+	padding-left: 14px;
+}
+#passport-color-list{
+	-webkit-box-shadow: 1px 1px 6px 0 rgba(90,90,90,0.2);
+    -moz-box-shadow: 1px 1px 6px 0 rgba(90,90,90,0.2);
+    box-shadow: 1px 1px 6px 0 rgba(90,90,90,0.2);
+	display:none;
+}
+.opened #passport-color-list{display:block;}
+.passportcolor-container #firstEmptyOpt, .passportcolor-container.passport-right #firstEmptyOpt, .passportcolor-container.passport-right:hover #firstEmptyOpt{
+	border-bottom:rgba(0,0,0,0.1) 1px solid;
+	color:#2d2d2d;
+}
+/*.passportcolor-container #firstEmptyOpt{color:#666666;}*/
+#passport-color:hover #firstEmptyOpt:hover{
+	border-bottom-color:rgba(0,0,0,0.2);
+}
+.passportcolor-container #firstEmptyOpt:hover, .passportcolor-container.opened #firstEmptyOpt{color:#2d2d2d;}
+@keyframes firstemptyopt-right-anim{
+	0%{border-bottom-color:#D7D3CE}
+	20%{border-bottom-color:#24ddd0;border-bottom-width:2px;}
+	100%{border-bottom-color:#D7D3CE}
+}
+.passportcolor-container.passport-right #firstEmptyOpt{
+	animation: firstemptyopt-right-anim 1s linear;
+}
+.opened #firstEmptyOpt{
+	color:#2d2d2d;
+	border-bottom: #00a095 2px solid; /* D7D3CE */
+}
+/*#passport-color[disabled] #firstEmptyOpt{color:#666666;}*/
+.passportcolor-container.passport-wrong #firstEmptyOpt{
+	border-bottom:#f48154 2px solid; /* #F48356 */
+}
+/*.passportcolor-container:hover #firstEmptyOpt{border-bottom:#FFE66C 2px solid;}*/
+.passport-right #passport-color #firstEmptyOpt {cursor:default;}
+#passport-color #firstEmptyOpt {display:block;background-color:transparent;height:23px;line-height:25px;font-size:28px;padding-left:0px;width:284px;}
+#passport-color.opened .color-opt{display:block;height:45px;line-height:45px;font-size:27px;}
+#passport-color.opened .color-opt.selected,#passport-color.opened .color-opt.selected:hover{color:#00A094}
+#passport-color.opened .color-opt:hover{background-color:#f0f0f0;color:#2d2d2d;}
+#passport-color.opened #firstEmptyOpt{background-color:transparent;}
+
+#passport-color:before{
+	content:'';
+	display:block;
+	position:absolute;
+	width: 14px;
+    height: 10px;
+    top: 9px;
+    left: 270px;
+	background-size:100%;
+	background-image:url(img/dropdown_down_unselected.svg);
+	background-repeat:no-repeat;
+}
+#passport-color.selected:before{
+	background-image:url(img/dropdown_down_unselected.svg);
+}
+
+#passport-color:hover:before{
+	background-size:100%;
+	background-image:url(img/dropdown_down_hover.svg);
+	background-repeat:no-repeat;
+}
+#passport-color.selected:hover:before{
+	background-image:url(img/dropdown_down_hover.svg);
+}
+#passport-color.opened:before{
+	background-image:url(img/dropdown_up.svg);
+}
+
+#passport-color.opened:hover:before{
+	background-image:url(img/dropdown_up.svg);
+}
+
+.finished #passport-color:before, .passport-right #passport-color:before{
+	display:none;
+}
+.passport-right #passport-color .color-opt{color:#2d2d2d;}
+.passportcolor-container select::-ms-expand {
+    display: none;
+}
+.passport-field-line{
+	width:100%;
+	height:0px;
+	position:absolute;
+	bottom:0px;
+	left:0px;
+	-moz-border-bottom-left-radius:2px;
+	-moz-border-bottom-right-radius:2px;
+	-webkit-border-bottom-left-radius:2px;
+	-webkit-border-bottom-right-radius:2px;
+	border-bottom-left-radius:2px;
+	border-bottom-right-radius:2px;
+}
+
+
+#reload{}
+#copyrightBtn{display:none;}
+#field.finished #copyrightBtn{display:block;}
+#description{top: 72px;z-index:1;}
+
+/*#field{background-image:url('source/02 some answers.jpg');background-size:100%;}*/
+
+#image0{
+	background-image:url(img/bg.jpg);
+	width: 943px;
+    height: 498px;
+	left:7px;
+	top:3px;
+}
+#copyrightDialog{z-index:100}
+@keyframes some-unselected-anim{
+	0%{
+		transform:none;
+	}
+	5%{transform:none}
+	5.2%{transform:rotate(2deg) translateX(2px);}
+	5.4%{transform:none}
+	5.6%{transform:rotate(-2deg) translateX(-2px);}
+	5.8%{transform:none;}
+	
+	6%{transform:rotate(2deg) translateX(2px);}
+	6.2%{transform:none}
+	6.4%{transform:rotate(-2deg) translateX(-2px);}
+	6.6%{transform:none}
+	
+	6.8%{transform:rotate(2deg) translateX(2px);}
+	7%{transform:none}
+	7.2%{transform:rotate(-2deg) translateX(-2px);}
+	7.4%{transform:none}
+	
+}
+
+.some-unselected .passport-special{animation: some-unselected-anim 12s linear infinite;}
+.some-unselected .passport-special.passport-selected{animation:none;}
+
+
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi){
+	#image0{background-image:url(img/bg_2x.jpg);}
+	#passport-place[data-variant='0'], #passport-selector[data-field='place'] .selector-variant-0{background-image:url(img/org@2x.png);}
+	#passport-place[data-variant='1'], #passport-selector[data-field='place'] .selector-variant-1{background-image:url(img/neorg@2x.png);}
+	#passport-mark[data-variant='0'], #passport-selector[data-field='mark'] .selector-variant-0{background-image:url(img/symbol1@2x.png);}
+	#passport-mark[data-variant='1'], #passport-selector[data-field='mark'] .selector-variant-1{background-image:url(img/symbol2@2x.png);}
+	#passport-mark[data-variant='2'], #passport-selector[data-field='mark'] .selector-variant-2{background-image:url(img/symbol3@2x.png);}
+	#passport-mark[data-variant='3'], #passport-selector[data-field='mark'] .selector-variant-3{background-image:url(img/symbol4@2x.png);}
+	#passport-mixtureorsubstance[data-variant='0'], #passport-selector[data-field='mixtureorsubstance'] .selector-variant-0{background-image:url(img/mixture@2x.png);}
+	#passport-mixtureorsubstance[data-variant='1'], #passport-selector[data-field='mixtureorsubstance'] .selector-variant-1{background-image:url(img/substance@2x.png);}
+	#passport-buoyancy[data-variant='0'], #passport-selector[data-field='buoyancy'] .selector-variant-0{background-image:url(img/plav@2x.png);}
+	#passport-buoyancy[data-variant='1'], #passport-selector[data-field='buoyancy'] .selector-variant-1{background-image:url(img/neplav@2x.png);}
+	#passport-combustibility[data-variant='0'], #passport-selector[data-field='combustibility'] .selector-variant-0{background-image:url(img/gor@2x.png);}
+	#passport-combustibility[data-variant='1'], #passport-selector[data-field='combustibility'] .selector-variant-1{background-image:url(img/negor@2x.png);}
+	#passport-brittleness[data-variant='0'], #passport-selector[data-field='brittleness'] .selector-variant-0{background-image:url(img/hrup@2x.png);}
+	#passport-brittleness[data-variant='1'], #passport-selector[data-field='brittleness'] .selector-variant-1{background-image:url(img/plast@2x.png);}
+	#passport-group[data-variant='0'], #passport-selector[data-field='group'] .selector-variant-0{background-image:url(img/metal@2x.png);}
+	#passport-group[data-variant='1'], #passport-selector[data-field='group'] .selector-variant-1{background-image:url(img/stone@2x.png);}
+	#passport-state[data-variant='0'], #passport-selector[data-field='state'] .selector-variant-0{background-image:url(img/gaz@2x.png);}
+	#passport-state[data-variant='1'], #passport-selector[data-field='state'] .selector-variant-1{background-image:url(img/zhid@2x.png);}
+	#passport-state[data-variant='2'], #passport-selector[data-field='state'] .selector-variant-2{background-image:url(img/tver@2x.png);}
+	#passport-photo[data-variant='0'], #passport-selector[data-field='photo'] .selector-variant-0{background-image:url(img/photo1@2x.png);}
+	#passport-photo[data-variant='1'], #passport-selector[data-field='photo'] .selector-variant-1{background-image:url(img/photo2@2x.png);}
+	#passport-photo[data-variant='2'], #passport-selector[data-field='photo'] .selector-variant-2{background-image:url(img/photo3@2x.png);}
+
+}
+
+</style>
+
+<script type="text/javascript">
+$(document).mousedown(function(){
+	$('#passport-selector').hide();
+	$('#passport-color').removeClass('opened');
+	$('#field').removeClass('some-unselected');
+    if(!$('#field').hasClass('finished')){
+		//$('.passport-right').removeClass('passport-right');
+		//$('.passport-wrong').removeClass('passport-wrong');
+	}
+});
+
+
+
+var test_passport = {
+	"create":function(input){
+		var result = [];
+		var fields = ['photo', 'place','mark','name', 'color', 'state', 'combustibility', 'buoyancy', 'mixtureorsubstance'];
+		var specials = [];
+		for(var i=0;i<fields.length;i++){
+			if(fields[i]=='name'){
+				var passportname = $('<div></div>').addClass('passportname-container');
+				var nameline = $('<div></div>').addClass('passport-line');
+				nameline.attr('id', 'passport-line-name');
+				passportname.append(nameline);
+				var nameinput = $('<div>'+input.name+'</div>');
+				nameinput.attr('id','passport-name');
+				passportname.append(nameinput);
+				result.push(passportname);
+			} else if(fields[i]=='color'){
+				var passportcolor = $('<div></div>').addClass('passportcolor-container');
+				var colorselect = $('<div></div>');
+				colorselect.attr('id','passport-color');
+				var firstEmptyOpt = $('<div></div>').addClass('color-opt');
+				firstEmptyOpt.click(function(){
+					$(this).parent().parent().removeClass('passport-wrong');
+					if($(this).parent().hasClass('opened') || $('.passportcolor-container:eq(0)').hasClass('passport-right')){
+						$(this).parent().removeClass('opened');
+					} else {
+						$(this).parent().addClass('opened');
+					}
+					
+				});
+				var selectoptclick = function(){
+					$(this).parent().removeClass('passport-wrong');
+					$('#passport-color').find('.color-opt').each(
+						function(){
+							$(this).removeClass('selected');
+						}
+					);
+					$('#firstEmptyOpt').html($(this).text());
+					$(this).addClass('selected');
+					$('#passport-color').removeClass('opened').addClass('selected');
+					activateButton();
+				};
+				var stopprop = function(e){
+					e.stopPropagation();
+				}
+				firstEmptyOpt.attr('id', 'firstEmptyOpt');
+				firstEmptyOpt.mousedown(stopprop);
+				colorselect.append(firstEmptyOpt);
+				var colorlist = $('<div></div>');
+				colorlist.attr('id', 'passport-color-list');
+				var opt = $('<div>серый</div>').addClass('color-opt');
+				opt.click(selectoptclick);
+				opt.mousedown(stopprop);
+				colorlist.append(opt);
+				opt = $('<div>чёрный</div>').addClass('color-opt');
+				opt.click(selectoptclick);
+				opt.mousedown(stopprop);
+				colorlist.append(opt);
+				opt = $('<div>коричневый</div>').addClass('color-opt');
+				opt.click(selectoptclick);
+				opt.mousedown(stopprop);
+				colorlist.append(opt);
+				opt = $('<div>жёлтый</div>').addClass('color-opt');
+				opt.click(selectoptclick);
+				opt.mousedown(stopprop);
+				colorlist.append(opt);
+				
+				colorselect.append(colorlist);
+				passportcolor.append(colorselect);
+				result.push(passportcolor);
+			} else {
+				var field = $('<div></div>').addClass('passport-field');
+				field.attr('id', 'passport-'+fields[i]);
+				field.data('name', fields[i]);
+				field.append($('<div></div>').addClass('passport-inner-overlay'));
+				field.click(test_passport.openSelector);
+				result.push(field);
+			}
+		}
+		for(i=0;i<specials.length;i++){
+			var special = $('<div></div>').addClass('passport-special');
+			special.append($('<div></div>').addClass('passport-inner-overlay'));
+			special.attr('id', 'passport-'+specials[i]);
+			special.data('name', specials[i]);
+			special.click(test_passport.selectSpecial);
+			result.push(special);
+		}
+		var selector = $('<div></div>');
+		selector.attr('id', 'passport-selector');
+		var overlay = $('<div></div>').addClass('passport-overlay');
+		overlay.click(function(){$(this).parent().hide()});
+		selector.append(overlay);
+		selector.mousedown(function(e){e.stopPropagation();});
+		selector.css('display','none');
+		for(i=0;i<4;i++){
+			var variant = $('<div></div>').addClass('selector-variant').addClass('selector-variant-'+i);
+			variant.data('num', i);
+			variant.click(test_passport.variantSelect);
+			selector.append(variant);
+		}
+		result.push(selector);
+		var currentDate = new Date();
+		var stamp = $('<div>'+currentDate.getDate()+'.'+currentDate.getMonth()+'.'+currentDate.getFullYear()+'</div>');
+		stamp.html('<div class="stamp-figures" style="background-image:url(img/'+currentDate.getDate()+'.png)"></div><div class="stamp-dot"></div><div class="stamp-figures" style="background-image:url(img/'+ (currentDate.getMonth()<9 ? ('0'+(currentDate.getMonth()+1)) : (currentDate.getMonth()+1)) +'.png)"></div><div class="stamp-dot"></div><div class="stamp-figures" style="background-image:url(img/20.png)"></div><div class="stamp-figures" style="background-image:url(img/'+currentDate.getFullYear().toString().slice(2)+'.png)"></div>');
+		stamp.attr('id','passport-stamp');
+		result.push(stamp);
+		return result;
+	},
+	"selectSpecial":function(){
+		if(!$(this).hasClass('passport-right')){
+			$(this).removeClass('passport-wrong');
+			activateButton();
+			if($(this).hasClass('passport-selected')){
+				$(this).removeClass('passport-selected');
+			} else {
+				$(this).addClass('passport-selected');
+			}
+		}
+	},
+	"openSelector":function(){
+		if(!$(this).hasClass('passport-right')){
+			$(this).removeClass('passport-wrong');
+			var selector = $('#passport-selector');
+			selector.attr('data-field', $(this).data('name'));
+			selector.data('field', $(this).data('name'));
+			if($(this).data('variant') || $(this).data('variant')=='0'){
+				selector.attr('data-variant', $(this).data('variant'));
+				selector.data('variant', $(this).data('variant'));
+			} else {
+				selector.removeAttr('data-variant');
+				selector.data('variant', '');
+			}
+			selector.show();
+		}
+	},
+	"variantSelect":function(){
+		activateButton();
+		var selector = $(this).parent();
+		selector.attr('data-variant',$(this).data('num'));
+		selector.hide();
+		var field = $('#passport-'+selector.data('field'));
+		field.attr('data-variant',$(this).data('num'));
+		field.data('variant', $(this).data('num'));
+	},
+	"check":function(){
+		var result = true;
+		var rightanswers = task[globalVars.currentTask].test_passport;
+		var nowrongselected = true;
+		var norightselected = false;
+		for(var key in rightanswers){
+			if(key=='name'){} 
+			else if(key=='color'){
+				if($('#firstEmptyOpt').text()!=rightanswers['color']){
+					result = false;
+					$('#passport-'+key).parent().addClass('passport-wrong');
+				} else {
+					$('#passport-color').attr('disabled','disabled');
+					$('#passport-'+key).parent().addClass('passport-right');
+				}
+			} else {
+				if( $('#passport-'+key).data('variant')!=rightanswers[key] ){
+					result = false;
+					$('#passport-'+key).addClass('passport-wrong');
+				} else {
+					$('#passport-'+key).addClass('passport-right');
+				}
+			}
+		}
+		if(nowrongselected && norightselected){
+			$('#field').addClass('some-unselected');
+		}
+		return result;
+	},
+	onFinish:function(){
+		$('.passport-field').unbind('click');
+		$('.passport-special').unbind('click');
+		
+	}
+}
+
+var task=[{},
+// step1
+{
+    "description":"Паспорт вещества",
+	"button":{},
+	"test_images":[{}],
+	"test_fake_reload":[],
+	"finalText":"Задание выполнено!",
+	//"nextStepDelay":1000,
+	"test_preloadimg":['img/dropdown_up.svg','img/dropdown_up_hover.svg','img/dropdown_down_hover.svg','img/plus_small_hover.svg','img/plus_big_hover.svg','img/arrow.png','img/gaz.png','img/gor.png','img/mixture.png','img/negor.png','img/neplav.png','img/plav.png','img/stamp.png','img/substance.png','img/tver.png','img/zhid.png','img/gaz@2x.png','img/gor@2x.png','img/mixture@2x.png','img/negor@2x.png','img/neplav@2x.png','img/plav@2x.png','img/stamp_x2.png','img/substance@2x.png','img/tver@2x.png','img/zhid@2x.png','img/01.png','img/02.png','img/03.png','img/04.png','img/05.png','img/06.png','img/07.png','img/08.png','img/09.png','img/10.png','img/11.png','img/12.png','img/13.png','img/14.png','img/15.png','img/16.png','img/17.png','img/18.png','img/19.png','img/20.png','img/21.png','img/22.png','img/23.png','img/24.png','img/25.png','img/26.png','img/27.png','img/28.png','img/29.png','img/30.png','img/31.png','img/1.png','img/2.png','img/3.png','img/4.png','img/5.png','img/6.png','img/7.png','img/8.png','img/9.png','img/dot.png','img/photo1.png','img/photo1@2x.png','img/photo2.png','img/photo2@2x.png','img/photo3.png','img/photo3@2x.png','img/neorg.png','img/neorg@2x.png','img/org.png','img/org@2x.png','img/symbol1.png','img/symbol2.png','img/symbol3.png','img/symbol4.png'],
+	"test_passport":{
+		"photo":0,
+		"name":"нефть",
+		"color":"чёрный", 
+		"state":1,
+		"place":0,
+		"mark":1,
+		"combustibility":0,
+		"buoyancy":0, 
+		"mixtureorsubstance":0
+	},
+	"test_copyrights":{
+		"title":"Авторы фотографий",
+		"elements":[
+			{"link":"https://www.flickr.com/photos/tommytrevorrow/6175050733/","name":"Минерал","author":"Polhigey. Flickr"},
+			{"link":"https://www.flickr.com/photos/deepbluephotography/14391517732/","name":"Раствор в колбе","author":"deep blue2. Flickr"}
+		]
+	}
+}
+]
+</script>
+
+</head>
+<body>
+	
+</body>
+</html>

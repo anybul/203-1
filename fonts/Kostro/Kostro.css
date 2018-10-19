@@ -1,0 +1,13 @@
+/* Copyright (c) 2013 by Letterhead Studio,. All rights reserved. */
+
+@font-face {
+	font-family: 'Kostro';
+	src: url('Kostro.eot');
+	src:
+	     url('Kostro.eot?#iefix') format('embedded-opentype'),
+	     url('Kostro.woff') format('woff'),
+	     url('Kostro.ttf') format('truetype'),
+	     url('Kostro.svg#Kostro') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
